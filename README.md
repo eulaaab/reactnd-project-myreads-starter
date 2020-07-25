@@ -7,7 +7,7 @@ This is a project for Udacity's React Fundamentals course called Myreads, a book
 - install all project dependencies with `npm install`
 - start the app with `npm start`
 
-## What In The Repo
+## What's In The Repo
 
 ```bash
 ├── CONTRIBUTING.md
