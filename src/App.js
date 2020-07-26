@@ -1,17 +1,16 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-import Main from "./pages/Main/Main";
-import AddBook from "./pages/AddBook/AddBook";
+import AddBook from "./components/AddBook/AddBook";
 import { Route } from "react-router-dom";
+import MainList from "./components/MainList/MainList";
 
 class BooksApp extends React.Component {
   state = {
     bookList: [],
-    bookStatus: ["Currently Reading", "Want to Read", "Read", "None"],
     currRead: [],
-    WantRead: [],
-    Read: [],
+    wantRead: [],
+    read: [],
   };
 
   componentDidMount() {
@@ -19,40 +18,84 @@ class BooksApp extends React.Component {
       console.log(bookList);
       this.setState(() => ({
         bookList: bookList,
+        currRead: this.getCurrReading(bookList),
+        wantRead: this.getWantRead(bookList),
+        read: this.getRead(bookList),
       }));
-      bookList.forEach((element) => {
-        let currReadArr = [];
-        if (element.shelf === "currentlyReading") {
-          currReadArr.push(element);
-          this.setState(() => ({
-            currRead: currReadArr,
-          }));
-          console.log(currReadArr);
-        }
-      });
+      // const resultCurrReading = this.getCurrReading(bookList);
+      // const resultWantRead = this.getWantRead(bookList);
+      // const resultRead = this.getRead(bookList);
     });
   }
 
-  // currReading = (books) => {
-  //   books.forEach((element) => {
-  //     let currReadList = [];
+  getCurrReading = (books) => {
+    let currReadArr = [];
+    books.forEach((element) => {
+      if (element.shelf === "currentlyReading") {
+        currReadArr.push(element);
+        // this.setState(() => ({
+        //   currRead: currReadArr,
+        // }));
+        // console.log(currReadArr);
+      }
+    });
+    return currReadArr;
+  };
 
-  //     console.log(currReadList);
-  //   });
-  // };
+  getWantRead = (books) => {
+    let wantReadArr = [];
+    books.forEach((element) => {
+      if (element.shelf === "wantToRead") {
+        wantReadArr.push(element);
+        // this.setState(() => ({
+        //   wantRead: wantReadArr,
+        // }));
+        // console.log(wantRead);
+      }
+    });
+    return wantReadArr;
+  };
+
+  getRead = (books) => {
+    let readArr = [];
+    books.forEach((element) => {
+      if (element.shelf === "read") {
+        readArr.push(element);
+        // this.setState(() => ({
+        //   read: readArr,
+        // }));
+        // console.log(readArr);
+      }
+    });
+    return readArr;
+  };
+
+  // bookList.forEach((element) => {
+  //   let currReadArr = [];
+  //   if (element.shelf === "currentlyReading") {
+  //     currReadArr.push(element);
+  //     this.setState(() => ({
+  //       currRead: currReadArr,
+  //     }));
+  //     console.log(currReadArr);
+  //   }
+  // });
 
   render() {
-    const { bookList, currRead } = this.state;
+    const { bookList, currRead, wantRead, read } = this.state;
     return (
       <div className="app">
-        {bookList.map((item) => (
-          <p>{item.title}</p>
-        ))}
-        <h1>Currently Reading</h1>
-        {currRead.map((item) => (
-          <p>{item.title}</p>
-        ))}
-        <Route exact path="/" render={() => <Main />} />
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <MainList
+              currReadList={currRead}
+              wantReadList={wantRead}
+              readList={read}
+            />
+          )}
+        />
         <Route path="/search" render={() => <AddBook />} />
         {/*
  {this.state.showSearchPage ? (
@@ -123,36 +166,6 @@ class BooksApp extends React.Component {
                           <div className="book-authors">Harper Lee</div>
                         </div>
                       </li>
-                      <li>
-                        <div className="book">
-                          <div className="book-top">
-                            <div
-                              className="book-cover"
-                              style={{
-                                width: 128,
-                                height: 188,
-                                backgroundImage:
-                                  'url("http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api")',
-                              }}
-                            />
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>
-                                  Move to...
-                                </option>
-                                <option value="currentlyReading">
-                                  Currently Reading
-                                </option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">Ender's Game</div>
-                          <div className="book-authors">Orson Scott Card</div>
-                        </div>
-                      </li>
                     </ol>
                   </div>
                 </div>
@@ -161,34 +174,7 @@ class BooksApp extends React.Component {
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                       <li>
-                        <div className="book">
-                          <div className="book-top">
-                            <div
-                              className="book-cover"
-                              style={{
-                                width: 128,
-                                height: 193,
-                                backgroundImage:
-                                  'url("http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api")',
-                              }}
-                            />
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>
-                                  Move to...
-                                </option>
-                                <option value="currentlyReading">
-                                  Currently Reading
-                                </option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">1776</div>
-                          <div className="book-authors">David McCullough</div>
-                        </div>
+                      
                       </li>
                       <li>
                         <div className="book">
