@@ -19,6 +19,7 @@ export default class BookList extends Component {
                           image={book.imageLinks.smallThumbnail}
                           title={book.title}
                           author={book.authors[0]}
+                          shelf={book.shelf}
                         />
                       </li>
                     );
