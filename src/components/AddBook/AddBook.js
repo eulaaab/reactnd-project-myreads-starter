@@ -9,6 +9,7 @@ export default class AddBook extends Component {
     query: "",
     bookResult: [],
     book: "",
+    bookList: this.state,
   };
 
   bookQuery = (query) => {
@@ -17,7 +18,7 @@ export default class AddBook extends Component {
     });
   };
   componentDidUpdate() {
-    const { query } = this.state;
+    const { query, bookList } = this.state;
     if (query.length) {
       BooksAPI.search(query).then((books) => {
         console.log(books);
@@ -35,42 +36,34 @@ export default class AddBook extends Component {
       });
     }
   }
-  // BooksAPI.search(query).then((books) => {
-  //   console.log(books);
-  //   if (books && books.length) {
-  //     this.setState(() => ({
-  //       query: query,
-  //       bookResult: books,
-  //     }));
-  //   } else {
-  //     this.setState(() => ({
-  //       query,
-  //       bookResult: [],
-  //     }));
-  //   }
-  // });
 
   render() {
-    const {
-      bookResult,
-      bookList,
-      query,
-      image,
-      title,
-      author,
-      shelf,
-    } = this.state;
+    const { bookResult, query } = this.state;
 
-    const showResults =
-      query === ""
-        ? []
-        : bookResult.filter(
-            (book) => {
-              book.title.toLowerCase().includes(query.toLowerCase());
+    // const showResults =
+    //   query === ""
+    //     ? []
+    //     : bookResult.filter(
+    //         (book) => {
+    //           book.title.toLowerCase().includes(query.toLowerCase());
+    //         }
+    //         // (book) => console.log("book", book)
+    //       );
+
+    const filteredArray = (array, array2) => {
+      //const { bookResult } = this.state;
+      let bookArr = [];
+      array.forEach((item) => {
+        if (array2 != undefined) {
+          array2.filter((element) => {
+            if (element.id !== item.id) {
+              bookArr.push(item);
             }
-            // (book) => console.log("book", book)
-          );
-
+          });
+          return bookArr;
+        }
+      });
+    };
     console.log("nooks", this.state.bookList);
     return (
       <div>
@@ -90,15 +83,19 @@ export default class AddBook extends Component {
           </div>
           <div className="search-books-results">
             <ol className="books-grid">
-              {bookResult.length &&
+              {bookResult.length > 0 ? (
                 bookResult.map((book) => (
                   <BookCard
-                    image={book.imageLinks.smallThumbnail}
+                    image={book.imageLinks}
                     title={book.title}
                     author={book.authors}
                     shelf={book.shelf}
+                    subtitle={book.subtitle}
                   />
-                ))}
+                ))
+              ) : (
+                <div>No Result</div>
+              )}
             </ol>
           </div>
         </div>

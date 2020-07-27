@@ -14,6 +14,10 @@ class BooksApp extends React.Component {
   };
 
   componentDidMount() {
+    this.getBooks();
+  }
+
+  getBooks = () => {
     BooksAPI.getAll().then((bookList) => {
       console.log(bookList);
       this.setState(() => ({
@@ -22,11 +26,8 @@ class BooksApp extends React.Component {
         wantRead: this.getWantRead(bookList),
         read: this.getRead(bookList),
       }));
-      // const resultCurrReading = this.getCurrReading(bookList);
-      // const resultWantRead = this.getWantRead(bookList);
-      // const resultRead = this.getRead(bookList);
     });
-  }
+  };
 
   getCurrReading = (books) => {
     let currReadArr = [];
@@ -81,8 +82,14 @@ class BooksApp extends React.Component {
   //   }
   // });
 
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      //  console.log(bookList);
+      this.getBooks();
+    });
+  };
   render() {
-    const { bookList, currRead, wantRead, read } = this.state;
+    const { bookList, currRead, wantRead, read, updateShelf } = this.state;
     return (
       <div className="app">
         <Route
@@ -96,7 +103,12 @@ class BooksApp extends React.Component {
             />
           )}
         />
-        <Route path="/search" render={() => <AddBook bookList={bookList} />} />
+        <Route
+          path="/search"
+          render={() => (
+            <AddBook bookList={bookList} updateShelf={updateShelf} />
+          )}
+        />
 
         {/*
  {this.state.showSearchPage ? (

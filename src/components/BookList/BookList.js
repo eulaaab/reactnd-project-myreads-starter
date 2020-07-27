@@ -4,7 +4,7 @@ import BookCard from "../BookCard/BookCard";
 
 export default class BookList extends Component {
   render() {
-    const { books, bookshelf } = this.props;
+    const { books, bookshelf, updateShelf } = this.props;
     return (
       <>
         <div className="bookshelf">
@@ -16,10 +16,12 @@ export default class BookList extends Component {
                     return (
                       <li key={index}>
                         <BookCard
-                          image={book.imageLinks.smallThumbnail}
+                          updateShelf={updateShelf}
+                          image={book.imageLinks}
                           title={book.title}
                           author={book.authors[0]}
                           shelf={book.shelf}
+                          book={book}
                         />
                       </li>
                     );
