@@ -15,14 +15,7 @@ export default class BookList extends Component {
                 ? books.map((book, index) => {
                     return (
                       <li key={index}>
-                        <BookCard
-                          updateShelf={updateShelf}
-                          image={book.imageLinks}
-                          title={book.title}
-                          author={book.authors[0]}
-                          shelf={book.shelf}
-                          book={book}
-                        />
+                        <BookCard updateShelf={updateShelf} book={book} />
                       </li>
                     );
                   })

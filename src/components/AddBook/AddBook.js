@@ -10,6 +10,7 @@ export default class AddBook extends Component {
     bookResult: [],
     book: "",
     bookList: this.state,
+    shelf: "",
   };
 
   bookQuery = (query) => {
@@ -17,6 +18,7 @@ export default class AddBook extends Component {
       query,
     });
   };
+
   componentDidUpdate() {
     const { query, bookList } = this.state;
     if (query.length) {
@@ -26,6 +28,7 @@ export default class AddBook extends Component {
           this.setState(() => ({
             // query: query,
             bookResult: books,
+            shelf: "none",
           }));
         } else {
           this.setState(() => ({
@@ -38,7 +41,7 @@ export default class AddBook extends Component {
   }
 
   render() {
-    const { bookResult, query } = this.state;
+    const { bookResult, query, shelf } = this.state;
 
     // const showResults =
     //   query === ""
@@ -64,7 +67,8 @@ export default class AddBook extends Component {
         }
       });
     };
-    console.log("nooks", this.state.bookList);
+    console.log(shelf);
+    const { updateShelf } = this.props;
     return (
       <div>
         <div className="search-books">
@@ -86,11 +90,9 @@ export default class AddBook extends Component {
               {bookResult.length > 0 ? (
                 bookResult.map((book) => (
                   <BookCard
-                    image={book.imageLinks}
-                    title={book.title}
-                    author={book.authors}
-                    shelf={book.shelf}
-                    subtitle={book.subtitle}
+                    updateShelf={updateShelf}
+                    book={book}
+                    shelf={shelf}
                   />
                 ))
               ) : (

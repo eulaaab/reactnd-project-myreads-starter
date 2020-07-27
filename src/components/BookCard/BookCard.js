@@ -3,6 +3,9 @@ import "../../App.css";
 //import * as BooksAPI from "../..BooksAPI";
 
 export default class BookCard extends Component {
+  state = {
+    shelf: this.props,
+  };
   // state ={
   //   shelf="none"
   // }
@@ -14,14 +17,24 @@ export default class BookCard extends Component {
   //     }
   //   }
 
-  updateShelf = (book, shelf) => {
-    if (this.props.updateShelf) {
-      this.updateShelf(book, shelf);
-    }
+  handleShelf = (book, event) => {
+    //const { shelf } = event.target.value;
+    // event.preventDefault();
+    // console.log("event value", event.target.value);
+    // console.log("book", book);
+    // this.setState(() => ({
+    //   shelf: shelf,
+    // }));
+    this.props.updateShelf(book, event);
+    // if (this.props.updateShelf) {
+    //   this.updateShelf(book, shelf);
+    // }
   };
 
   render() {
-    const { image, title, author, shelf, book, updateShelf } = this.props;
+    const { book, updateShelf } = this.props;
+    const { imageLinks, title, author, shelf } = book;
+    //const { shelf } = this.state;
     const isCurrentlyReading = shelf === "currentlyReading";
     const isWantRead = shelf === "wantToRead";
     const isRead = shelf === "read";
@@ -46,7 +59,7 @@ export default class BookCard extends Component {
       <div className="book">
         <div className="book-top">
           <img
-            src={image ? image.thumbnail : "no image"}
+            src={imageLinks ? imageLinks.thumbnail : "no image"}
             className="book-cover"
             style={{
               width: 128,
@@ -57,7 +70,7 @@ export default class BookCard extends Component {
           <div className="book-shelf-changer">
             <select
               value={shelf}
-              onChange={(event) => updateShelf(book, event)}
+              onChange={(event) => this.handleShelf(book, event.target.value)}
             >
               <option value="move" disabled>
                 Move to...
@@ -65,18 +78,18 @@ export default class BookCard extends Component {
 
               <option
                 value="currentlyReading"
-                selected={isCurrentlyReading}
+                selected={shelf}
                 className="shelf"
               >
                 Currently Reading
               </option>
-              <option selected={isWantRead} value="wantToRead">
+              <option selected={shelf} value="wantToRead">
                 Want to Read
               </option>
-              <option selected={isRead} value="read">
+              <option selected={shelf} value="read">
                 Read
               </option>
-              <option selected={isNone} value="none">
+              <option selected={shelf} value="none">
                 None
               </option>
             </select>
