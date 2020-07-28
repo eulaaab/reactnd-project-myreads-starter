@@ -1,7 +1,7 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-import AddBook from "./components/AddBook/AddBook";
+import SearchBook from "./components/SearchBook/SearchBook";
 import { Route, Link } from "react-router-dom";
 import MainList from "./components/MainList/MainList";
 
@@ -21,7 +21,6 @@ class BooksApp extends React.Component {
 
   getBooks = () => {
     BooksAPI.getAll().then((bookList) => {
-      console.log(bookList);
       this.setState(() => ({
         bookList: bookList,
         currRead: this.getCurrReading(bookList),
@@ -119,7 +118,7 @@ class BooksApp extends React.Component {
         <Route
           path="/search"
           render={() => (
-            <AddBook bookList={bookList} updateShelf={this.updateShelf} />
+            <SearchBook bookList={bookList} updateShelf={this.updateShelf} />
           )}
         />
         <div className="open-search">

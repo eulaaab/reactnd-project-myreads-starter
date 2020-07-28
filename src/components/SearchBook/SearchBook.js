@@ -17,22 +17,23 @@ export default class AddBook extends Component {
     this.setState({
       query,
     });
+    this._isMounted = true;
   };
 
   componentDidUpdate() {
-    const { query, bookList } = this.state;
-    if (query.length) {
+    const { query } = this.state;
+    if (query) {
       BooksAPI.search(query).then((books) => {
         console.log(books);
         if (books && books.length) {
           this.setState(() => ({
-            // query: query,
-            bookResult: books,
+            query: this.props.query,
+            bookResult: this.newArray(books, this.props.bookList),
             shelf: "none",
           }));
         } else {
           this.setState(() => ({
-            //  query,
+            query: "",
             bookResult: [],
           }));
         }
@@ -40,34 +41,24 @@ export default class AddBook extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState(() => ({}));
+  }
+
+  newArray = (bookResult, bookList) => {
+    bookResult.forEach((element, i) => {
+      let result = bookList.find((item) => item.id === element.id);
+      if (result) {
+        console.log("this is RESULT;", result);
+        element.shelf = result.shelf;
+        console.log(bookResult);
+      }
+    });
+    return bookResult;
+  };
+
   render() {
     const { bookResult, query, shelf } = this.state;
-
-    // const showResults =
-    //   query === ""
-    //     ? []
-    //     : bookResult.filter(
-    //         (book) => {
-    //           book.title.toLowerCase().includes(query.toLowerCase());
-    //         }
-    //         // (book) => console.log("book", book)
-    //       );
-
-    const filteredArray = (array, array2) => {
-      //const { bookResult } = this.state;
-      let bookArr = [];
-      array.forEach((item) => {
-        if (array2 != undefined) {
-          array2.filter((element) => {
-            if (element.id !== item.id) {
-              bookArr.push(item);
-            }
-          });
-          return bookArr;
-        }
-      });
-    };
-    console.log(shelf);
     const { updateShelf } = this.props;
     return (
       <div>
