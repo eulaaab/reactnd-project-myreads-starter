@@ -63,35 +63,13 @@ class BooksApp extends React.Component {
     books.forEach((element) => {
       if (element.shelf === "read") {
         readArr.push(element);
-        // this.setState(() => ({
-        //   read: readArr,
-        // }));
-        // console.log(readArr);
       }
     });
     return readArr;
   };
 
-  // bookList.forEach((element) => {
-  //   let currReadArr = [];
-  //   if (element.shelf === "currentlyReading") {
-  //     currReadArr.push(element);
-  //     this.setState(() => ({
-  //       currRead: currReadArr,
-  //     }));
-  //     console.log(currReadArr);
-  //   }
-  // });
-
   updateShelf = (book, shelf) => {
-    // console.log("shelf state from App", this.state.shelf.shelf);
-    // this.setState(() => ({
-    //   bookState: shelf,
-    //   book: book,
-    // }));
     BooksAPI.update(book, shelf).then(() => {
-      //  console.log(bookList);
-      // console.log("shelf state from App", this.state.shelf.shelf);
       const { bookList } = this.state;
       this.setState(() => ({
         bookList: [...bookList, book],
