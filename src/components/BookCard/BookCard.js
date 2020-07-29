@@ -12,7 +12,7 @@ export default class BookCard extends Component {
 
   render() {
     const { book } = this.props;
-    const { imageLinks, title, author, shelf } = book;
+    const { imageLinks, title, authors, shelf } = book;
     const isCurrentlyReading = shelf === "currentlyReading";
     const isWantRead = shelf === "wantToRead";
     const isRead = shelf === "read";
@@ -40,25 +40,26 @@ export default class BookCard extends Component {
               </option>
               <option
                 value="currentlyReading"
+                select={shelf}
                 selected={isCurrentlyReading}
                 className="shelf"
               >
                 Currently Reading
               </option>
-              <option selected={isWantRead} value="wantToRead">
+              <option select={shelf} selected={isWantRead} value="wantToRead">
                 Want to Read
               </option>
-              <option selected={isRead} value="read">
+              <option select={shelf} selected={isRead} value="read">
                 Read
               </option>
-              <option selected={isNone} value="none">
+              <option select={shelf} selected={isNone} value="none">
                 None
               </option>
             </select>
           </div>
         </div>
         <div className="book-title">{title}</div>
-        <div className="book-authors">{author}</div>
+        {authors && <div className="book-authors">{authors.join(", ")}</div>}
       </div>
     );
   }

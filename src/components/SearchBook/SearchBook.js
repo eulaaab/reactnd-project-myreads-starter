@@ -8,42 +8,37 @@ export default class AddBook extends Component {
   state = {
     query: "",
     bookResult: [],
-    book: "",
-    bookList: this.state,
-    shelf: "",
   };
 
-  bookQuery = (query) => {
-    this.setState({
-      query,
-    });
-    this._isMounted = true;
-  };
+  bookQuery = (event) => {
+    const query = event.target.value;
 
-  componentDidUpdate() {
-    const { query } = this.state;
-    if (query) {
+    //const { query } = this.state;
+    //this.setState(() => ({ query }));
+    if (query.length) {
       BooksAPI.search(query).then((books) => {
-        console.log(books);
         if (books && books.length) {
+          let bookSearch = this.newArray(books, this.props.bookList);
           this.setState(() => ({
-            query: this.props.query,
-            bookResult: this.newArray(books, this.props.bookList),
+            //query: this.state.query,
+            bookResult: bookSearch,
             shelf: "none",
           }));
         } else {
           this.setState(() => ({
-            query: "",
-            bookResult: [],
+            bookResult: null,
           }));
         }
       });
+    } else {
+      this.setState(() => ({
+        bookResult: [],
+      }));
     }
-  }
-
-  componentWillUnmount() {
-    this.setState(() => ({}));
-  }
+    this.setState({
+      query: query,
+    });
+  };
 
   newArray = (bookResult, bookList) => {
     bookResult.forEach((element, i) => {
@@ -72,20 +67,22 @@ export default class AddBook extends Component {
                 type="text"
                 placeholder="Search by title"
                 value={query}
-                onChange={(event) => this.bookQuery(event.target.value)}
+                onChange={this.bookQuery}
               />
             </div>
           </div>
           <div className="search-books-results">
             <ol className="books-grid">
-              {bookResult.length > 0 ? (
-                bookResult.map((book) => (
-                  <BookCard
-                    updateShelf={updateShelf}
-                    book={book}
-                    shelf={shelf}
-                  />
-                ))
+              {bookResult !== null ? (
+                bookResult.length > 0 ? (
+                  bookResult.map((book) => (
+                    <BookCard
+                      updateShelf={updateShelf}
+                      book={book}
+                      shelf={shelf}
+                    />
+                  ))
+                ) : null
               ) : (
                 <div>No Result</div>
               )}

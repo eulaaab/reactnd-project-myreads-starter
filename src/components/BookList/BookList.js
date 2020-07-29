@@ -14,7 +14,7 @@ export default class BookList extends Component {
               {books !== undefined
                 ? books.map((book, index) => {
                     return (
-                      <li key={index}>
+                      <li key={book.id}>
                         <BookCard updateShelf={updateShelf} book={book} />
                       </li>
                     );
