@@ -12,7 +12,7 @@ export default class BookList extends Component {
           <div className="bookshelf-books">
             <ol className="books-grid">
               {books !== undefined
-                ? books.map((book, index) => {
+                ? books.map((book) => {
                     return (
                       <li key={book.id}>
                         <BookCard updateShelf={updateShelf} book={book} />

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import "../../App.css";
 
 export default class BookCard extends Component {
-  state = {
-    shelf: this.props,
-  };
+  // state = {
+  //   shelf: this.props.book.shelf,
+  // };
 
   handleShelf = (book, event) => {
     this.props.updateShelf(book, event);
@@ -13,10 +13,7 @@ export default class BookCard extends Component {
   render() {
     const { book } = this.props;
     const { imageLinks, title, authors, shelf } = book;
-    const isCurrentlyReading = shelf === "currentlyReading";
-    const isWantRead = shelf === "wantToRead";
-    const isRead = shelf === "read";
-    const isNone = !shelf;
+    const selectedValue = shelf ? shelf : "none";
 
     return (
       <div className="book">
@@ -32,27 +29,22 @@ export default class BookCard extends Component {
           />
           <div className="book-shelf-changer">
             <select
-              value={shelf}
+              value={selectedValue}
               onChange={(event) => this.handleShelf(book, event.target.value)}
             >
               <option value="move" disabled>
                 Move to...
               </option>
-              <option
-                value="currentlyReading"
-                select={shelf}
-                selected={isCurrentlyReading}
-                className="shelf"
-              >
+              <option value="currentlyReading" className="shelf">
                 Currently Reading
               </option>
-              <option select={shelf} selected={isWantRead} value="wantToRead">
+              <option value="wantToRead" className="shelf">
                 Want to Read
               </option>
-              <option select={shelf} selected={isRead} value="read">
+              <option value="read" className="shelf">
                 Read
               </option>
-              <option select={shelf} selected={isNone} value="none">
+              <option value="none" className="shelf">
                 None
               </option>
             </select>

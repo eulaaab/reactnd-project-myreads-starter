@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import * as BooksAPI from "../../BooksAPI.js";
 import BookCard from "../../components/BookCard/BookCard";
 
-export default class AddBook extends Component {
+export default class SearchBook extends Component {
   state = {
     query: "",
     bookResult: [],
@@ -22,7 +22,7 @@ export default class AddBook extends Component {
           this.setState(() => ({
             //query: this.state.query,
             bookResult: bookSearch,
-            shelf: "none",
+            shelf: bookSearch.shelf,
           }));
         } else {
           this.setState(() => ({
@@ -44,9 +44,7 @@ export default class AddBook extends Component {
     bookResult.forEach((element, i) => {
       let result = bookList.find((item) => item.id === element.id);
       if (result) {
-        console.log("this is RESULT;", result);
         element.shelf = result.shelf;
-        console.log(bookResult);
       }
     });
     return bookResult;
@@ -80,6 +78,7 @@ export default class AddBook extends Component {
                       updateShelf={updateShelf}
                       book={book}
                       shelf={shelf}
+                      key={book.id}
                     />
                   ))
                 ) : null

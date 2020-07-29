@@ -5,9 +5,24 @@ import SearchBook from "./components/SearchBook/SearchBook";
 import { Route } from "react-router-dom";
 import MainList from "./components/MainList/MainList";
 
+const SHELVES = [
+  {
+    title: "Currently Reading",
+    id: "currentlyReading",
+  },
+  {
+    title: "Want To Read",
+    id: "wantToRead",
+  },
+  {
+    title: "Read",
+    id: "read",
+  },
+];
+
 class BooksApp extends React.Component {
   state = {
-    bookList: [],
+    books: [],
     currRead: [],
     wantRead: [],
     read: [],
@@ -20,13 +35,12 @@ class BooksApp extends React.Component {
   }
 
   getBooks = () => {
-    BooksAPI.getAll().then((bookList) => {
-      console.log(bookList);
+    BooksAPI.getAll().then((books) => {
       this.setState(() => ({
-        bookList: bookList,
-        currRead: this.getCurrReading(bookList),
-        wantRead: this.getWantRead(bookList),
-        read: this.getRead(bookList),
+        bookList: books,
+        currRead: this.getCurrReading(books),
+        wantRead: this.getWantRead(books),
+        read: this.getRead(books),
       }));
     });
   };
@@ -34,7 +48,7 @@ class BooksApp extends React.Component {
   getCurrReading = (books) => {
     let currReadArr = [];
     books.forEach((element) => {
-      if (element.shelf === "currentlyReading") {
+      if (element.shelf === SHELVES[0].id) {
         currReadArr.push(element);
         // this.setState(() => ({
         //   currRead: currReadArr,
@@ -48,7 +62,7 @@ class BooksApp extends React.Component {
   getWantRead = (books) => {
     let wantReadArr = [];
     books.forEach((element) => {
-      if (element.shelf === "wantToRead") {
+      if (element.shelf === SHELVES[1].id) {
         wantReadArr.push(element);
         // this.setState(() => ({
         //   wantRead: wantReadArr,
